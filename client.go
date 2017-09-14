@@ -3,9 +3,9 @@ package apixu
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 )
 
 const apiVersion = "v1"
@@ -263,12 +263,17 @@ type errorResponse struct {
 
 // Client represents apixu client.
 type Client struct {
-	apiURL string
+	apiKey string
 }
 
 // Current returns CurrentWeather obj representing current weather status.
 func (client *Client) Current(q string) (*CurrentWeather, error) {
-	url := getURL(client.apiURL, "current") + ("&q=" + q)
+	url, err := client.getURL("current.json", q)
+
+	if err != nil {
+		return nil, err
+	}
+
 	body, err := request(url)
 
 	if err != nil {
@@ -286,7 +291,12 @@ func (client *Client) Current(q string) (*CurrentWeather, error) {
 
 // Forecast returns ForecastWeather obj representing Forecast status.
 func (client *Client) Forecast(q string, days int) (*ForecastWeather, error) {
-	url := getURL(client.apiURL, "forecast") + ("&q=" + q) + ("&days=" + string(days))
+	url, err := client.getURL("forecast.json", q)
+
+	if err != nil {
+		return nil, err
+	}
+
 	body, err := request(url)
 
 	if err != nil {
@@ -304,7 +314,12 @@ func (client *Client) Forecast(q string, days int) (*ForecastWeather, error) {
 
 // History returns HistoryWeather obj representing History status.
 func (client *Client) History(q string, dt string) (*HistoryWeather, error) {
-	url := getURL(client.apiURL, "history") + ("&q=" + q) + ("&dt=" + dt)
+	url, err := client.getURL("history.json", q)
+
+	if err != nil {
+		return nil, err
+	}
+
 	body, err := request(url)
 
 	if err != nil {
@@ -322,7 +337,12 @@ func (client *Client) History(q string, dt string) (*HistoryWeather, error) {
 
 // Search returns MatchingCities obj representing a list of matched cities.
 func (client *Client) Search(q string) (*MatchingCities, error) {
-	url := getURL(client.apiURL, "search") + ("&q=" + q)
+	url, err := client.getURL("search.json", q)
+
+	if err != nil {
+		return nil, err
+	}
+
 	body, err := request(url)
 
 	if err != nil {
@@ -338,15 +358,33 @@ func (client *Client) Search(q string) (*MatchingCities, error) {
 	return &matchingCities, nil
 }
 
-// NewClient Creates new client and returns a ref.
-func NewClient(apiKey string) *Client {
-	url := fmt.Sprintf("%s/%%s.json?key=%s", apiBaseURL, apiKey)
-	client := &Client{apiURL: url}
-	return client
+func (client *Client) getURL(path string, q string) (string, error) {
+	baseURL, err := url.Parse(apiBaseURL)
+
+	if err != nil {
+		return "", err
+	}
+
+	pathURL, err := url.Parse(path)
+
+	if err != nil {
+		return "", err
+	}
+
+	URL := baseURL.ResolveReference(pathURL)
+	query := URL.Query()
+	query.Set("key", client.apiKey)
+	query.Set("q", q)
+
+	URL.RawQuery = query.Encode()
+
+	return URL.String(), nil
 }
 
-func getURL(apiURL string, path string) string {
-	return fmt.Sprintf(apiURL, path)
+// NewClient Creates new client and returns a ref.
+func NewClient(apiKey string) *Client {
+	client := &Client{apiKey: apiKey}
+	return client
 }
 
 func request(url string) ([]byte, error) {
