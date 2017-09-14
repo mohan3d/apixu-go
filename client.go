@@ -2,6 +2,7 @@ package apixu
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -253,6 +254,13 @@ type MatchingCities []struct {
 	URL     string  `json:"url"`
 }
 
+type errorResponse struct {
+	Error struct {
+		Code    int    `json:"code"`
+		Message string `json:"message"`
+	} `json:"error"`
+}
+
 // Client represents apixu client.
 type Client struct {
 	apiURL string
@@ -262,15 +270,18 @@ type Client struct {
 func (client *Client) Current(q string) (*CurrentWeather, error) {
 	//url := fmt.Sprintf(client.apiUrl, client.apiKey, q)
 	url := getURL(client.apiURL, "current") + ("&q=" + q)
-	response, err := http.Get(url)
 
-	if err != nil {
-		return nil, err
-	}
+	// response, err := http.Get(url)
 
-	defer response.Body.Close()
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	body, err := ioutil.ReadAll(response.Body)
+	// defer response.Body.Close()
+
+	// body, err := ioutil.ReadAll(response.Body)
+
+	body, err := request(url)
 
 	if err != nil {
 		return nil, err
@@ -376,4 +387,29 @@ func NewClient(apiKey string) *Client {
 
 func getURL(apiURL string, path string) string {
 	return fmt.Sprintf(apiURL, path)
+}
+
+func request(url string) ([]byte, error) {
+	response, err := http.Get(url)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+
+	// Validate response.
+	if response.StatusCode != 200 {
+		var errorJSON errorResponse
+
+		if err := json.Unmarshal(body, &errorJSON); err != nil {
+			return nil, err
+		}
+
+		return nil, errors.New(errorJSON.Error.Message)
+	}
+
+	return body, err
 }
