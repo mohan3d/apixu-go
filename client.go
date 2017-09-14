@@ -268,19 +268,7 @@ type Client struct {
 
 // Current returns CurrentWeather obj representing current weather status.
 func (client *Client) Current(q string) (*CurrentWeather, error) {
-	//url := fmt.Sprintf(client.apiUrl, client.apiKey, q)
 	url := getURL(client.apiURL, "current") + ("&q=" + q)
-
-	// response, err := http.Get(url)
-
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// defer response.Body.Close()
-
-	// body, err := ioutil.ReadAll(response.Body)
-
 	body, err := request(url)
 
 	if err != nil {
@@ -298,18 +286,8 @@ func (client *Client) Current(q string) (*CurrentWeather, error) {
 
 // Forecast returns ForecastWeather obj representing Forecast status.
 func (client *Client) Forecast(q string, days int) (*ForecastWeather, error) {
-	//url := fmt.Sprintf("http://api.apixu.com/v1/forecast.json?key=%s&q=%s&days=%d", client.apiKey, q, days)
 	url := getURL(client.apiURL, "forecast") + ("&q=" + q) + ("&days=" + string(days))
-
-	response, err := http.Get(url)
-
-	if err != nil {
-		return nil, err
-	}
-
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := request(url)
 
 	if err != nil {
 		return nil, err
@@ -326,17 +304,8 @@ func (client *Client) Forecast(q string, days int) (*ForecastWeather, error) {
 
 // History returns HistoryWeather obj representing History status.
 func (client *Client) History(q string, dt string) (*HistoryWeather, error) {
-	//url := fmt.Sprintf("http://api.apixu.com/v1/history.json?key=%s&q=%s&dt=%s", client.apiKey, q, dt)
 	url := getURL(client.apiURL, "history") + ("&q=" + q) + ("&dt=" + dt)
-	response, err := http.Get(url)
-
-	if err != nil {
-		return nil, err
-	}
-
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := request(url)
 
 	if err != nil {
 		return nil, err
@@ -353,17 +322,8 @@ func (client *Client) History(q string, dt string) (*HistoryWeather, error) {
 
 // Search returns MatchingCities obj representing a list of matched cities.
 func (client *Client) Search(q string) (*MatchingCities, error) {
-	//url := fmt.Sprintf("http://api.apixu.com/v1/search.json?key=%s&q=%s", client.apiKey, q)
 	url := getURL(client.apiURL, "search") + ("&q=" + q)
-	response, err := http.Get(url)
-
-	if err != nil {
-		return nil, err
-	}
-
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := request(url)
 
 	if err != nil {
 		return nil, err
