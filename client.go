@@ -11,6 +11,12 @@ import (
 const apiVersion = "v1"
 const apiBaseURL = "http://api.apixu.com/" + apiVersion + "/"
 
+// OptionalParam represents optional query parameters.
+type OptionalParam struct {
+	name  string
+	value string
+}
+
 // CurrentWeather represents json returned by current.
 type CurrentWeather struct {
 	Location struct {
