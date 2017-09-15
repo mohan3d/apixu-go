@@ -3,6 +3,7 @@ package apixu
 import (
 	"os"
 	"testing"
+	"time"
 )
 
 var cities = []string{
@@ -43,7 +44,7 @@ func TestCurrentWeatherInValidCity(t *testing.T) {
 	_, err := client.Current("Unknown City")
 
 	if err == nil {
-		t.Errorf("No errors getting current weather of invalid city name")
+		t.Error("No errors getting current weather of invalid city name")
 	}
 }
 
@@ -62,7 +63,7 @@ func TestForecastWeatherValidCities(t *testing.T) {
 	}
 }
 
-func TestForecastWeatherInValidCities(t *testing.T) {
+func TestForecastWeatherInValidCity(t *testing.T) {
 	days := []int{1, 5, 10}
 	client := NewClient(getAPIKey())
 
@@ -70,7 +71,54 @@ func TestForecastWeatherInValidCities(t *testing.T) {
 		_, err := client.Forecast("Unknown City", day)
 
 		if err == nil {
-			t.Errorf("No errors getting forecast weather of invalid city name")
+			t.Error("No errors getting forecast weather of invalid city name")
 		}
+	}
+}
+
+func TestHistoryWeatherValidCities(t *testing.T) {
+	yesterday := time.Now().AddDate(0, 0, -1)
+	client := NewClient(getAPIKey())
+
+	for _, city := range cities {
+		_, err := client.History(city, yesterday.Format("2006 01 2"))
+
+		if err != nil {
+			t.Errorf("There was an error getting current weather of %s: %v", city, err)
+		}
+	}
+}
+
+func TestHistoryWeatherInValidCity(t *testing.T) {
+	yesterday := time.Now().AddDate(0, 0, -1)
+	client := NewClient(getAPIKey())
+
+	_, err := client.History("Unknown City", yesterday.Format("2006 01 2"))
+
+	if err == nil {
+		t.Error("No errors getting history weather of invalid city name")
+	}
+
+}
+
+func TestSearchValidCities(t *testing.T) {
+	client := NewClient(getAPIKey())
+
+	for _, city := range cities {
+		_, err := client.Search(city)
+
+		if err != nil {
+			t.Errorf("There was an error getting current weather of %s: %v", city, err)
+		}
+	}
+}
+
+func TestSearchInValidCity(t *testing.T) {
+	client := NewClient(getAPIKey())
+
+	_, err := client.Search("Unknown City")
+
+	if err == nil {
+		t.Error("No errors getting seach/autocomplete of invalid city name")
 	}
 }
