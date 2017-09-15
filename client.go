@@ -273,8 +273,8 @@ type Client struct {
 }
 
 // Current returns CurrentWeather obj representing current weather status.
-func (client *Client) Current(q string) (*CurrentWeather, error) {
-	url, err := client.getURL("current.json", q)
+func (client *Client) Current(q string, optionalParams ...OptionalParam) (*CurrentWeather, error) {
+	url, err := client.getURL("current.json", q, optionalParams...)
 
 	if err != nil {
 		return nil, err
@@ -296,8 +296,9 @@ func (client *Client) Current(q string) (*CurrentWeather, error) {
 }
 
 // Forecast returns ForecastWeather obj representing Forecast status.
-func (client *Client) Forecast(q string, days int) (*ForecastWeather, error) {
-	url, err := client.getURL("forecast.json", q)
+func (client *Client) Forecast(q string, days int, optionalParams ...OptionalParam) (*ForecastWeather, error) {
+	optionalParams = append(optionalParams, OptionalParam{"days", string(days)})
+	url, err := client.getURL("forecast.json", q, optionalParams...)
 
 	if err != nil {
 		return nil, err
@@ -319,7 +320,8 @@ func (client *Client) Forecast(q string, days int) (*ForecastWeather, error) {
 }
 
 // History returns HistoryWeather obj representing History status.
-func (client *Client) History(q string, dt string) (*HistoryWeather, error) {
+func (client *Client) History(q string, dt string, optionalParams ...OptionalParam) (*HistoryWeather, error) {
+	optionalParams = append(optionalParams, OptionalParam{"dt", dt})
 	url, err := client.getURL("history.json", q)
 
 	if err != nil {
@@ -364,7 +366,7 @@ func (client *Client) Search(q string) (*MatchingCities, error) {
 	return &matchingCities, nil
 }
 
-func (client *Client) getURL(path string, q string) (string, error) {
+func (client *Client) getURL(path string, q string, optionalParams ...OptionalParam) (string, error) {
 	baseURL, err := url.Parse(apiBaseURL)
 
 	if err != nil {
