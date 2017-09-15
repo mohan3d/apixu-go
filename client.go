@@ -322,7 +322,7 @@ func (client *Client) Forecast(q string, days int, optionalParams ...OptionalPar
 // History returns HistoryWeather obj representing History status.
 func (client *Client) History(q string, dt string, optionalParams ...OptionalParam) (*HistoryWeather, error) {
 	optionalParams = append(optionalParams, OptionalParam{"dt", dt})
-	url, err := client.getURL("history.json", q)
+	url, err := client.getURL("history.json", q, optionalParams...)
 
 	if err != nil {
 		return nil, err
