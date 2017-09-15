@@ -9,7 +9,7 @@ import (
 )
 
 const apiVersion = "v1"
-const apiBaseURL = "http://api.apixu.com/" + apiVersion
+const apiBaseURL = "http://api.apixu.com/" + apiVersion + "/"
 
 // CurrentWeather represents json returned by current.
 type CurrentWeather struct {
