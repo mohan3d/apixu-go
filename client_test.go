@@ -83,7 +83,7 @@ func TestHistoryWeatherValidCities(t *testing.T) {
 	client := NewClient(getAPIKey())
 
 	for _, city := range cities {
-		_, err := client.History(city, yesterday.Format("2006 01 2"))
+		_, err := client.History(city, yesterday.Format("2006-01-2"))
 
 		if err != nil {
 			t.Errorf("There was an error getting current weather of %s: %v", city, err)
@@ -95,7 +95,7 @@ func TestHistoryWeatherInValidCity(t *testing.T) {
 	yesterday := time.Now().AddDate(0, 0, -1)
 	client := NewClient(getAPIKey())
 
-	_, err := client.History(InvalidCityName, yesterday.Format("2006 01 2"))
+	_, err := client.History(InvalidCityName, yesterday.Format("2006-01-2"))
 
 	if err == nil {
 		t.Error("No errors getting history weather of invalid city name")
