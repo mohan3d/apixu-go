@@ -118,9 +118,13 @@ func TestSearchValidCities(t *testing.T) {
 func TestSearchInValidCity(t *testing.T) {
 	client := NewClient(getAPIKey())
 
-	_, err := client.Search(InvalidCityName)
+	matchedCities, err := client.Search(InvalidCityName)
 
-	if err == nil {
-		t.Error("No errors getting search/autocomplete of invalid city name")
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(*matchedCities) != 0 {
+		t.Error("Non-Empty array of matched cities for invalid city name")
 	}
 }
