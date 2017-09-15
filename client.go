@@ -384,6 +384,11 @@ func (client *Client) getURL(path string, q string, optionalParams ...OptionalPa
 	query.Set("key", client.apiKey)
 	query.Set("q", q)
 
+	// Set optional params.
+	for _, param := range optionalParams {
+		query.Set(param.name, param.value)
+	}
+
 	URL.RawQuery = query.Encode()
 
 	return URL.String(), nil
