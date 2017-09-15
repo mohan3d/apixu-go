@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+const InvalidCityName = "INVALID-CITY-NAME"
+
 var cities = []string{
 	"Cairo",
 	"London",
@@ -41,7 +43,7 @@ func TestCurrentWeatherValidCities(t *testing.T) {
 
 func TestCurrentWeatherInValidCity(t *testing.T) {
 	client := NewClient(getAPIKey())
-	_, err := client.Current("Unknown City")
+	_, err := client.Current(InvalidCityName)
 
 	if err == nil {
 		t.Error("No errors getting current weather of invalid city name")
@@ -68,7 +70,7 @@ func TestForecastWeatherInValidCity(t *testing.T) {
 	client := NewClient(getAPIKey())
 
 	for _, day := range days {
-		_, err := client.Forecast("Unknown City", day)
+		_, err := client.Forecast(InvalidCityName, day)
 
 		if err == nil {
 			t.Error("No errors getting forecast weather of invalid city name")
@@ -93,7 +95,7 @@ func TestHistoryWeatherInValidCity(t *testing.T) {
 	yesterday := time.Now().AddDate(0, 0, -1)
 	client := NewClient(getAPIKey())
 
-	_, err := client.History("Unknown City", yesterday.Format("2006 01 2"))
+	_, err := client.History(InvalidCityName, yesterday.Format("2006 01 2"))
 
 	if err == nil {
 		t.Error("No errors getting history weather of invalid city name")
@@ -116,9 +118,9 @@ func TestSearchValidCities(t *testing.T) {
 func TestSearchInValidCity(t *testing.T) {
 	client := NewClient(getAPIKey())
 
-	_, err := client.Search("Unknown City")
+	_, err := client.Search(InvalidCityName)
 
 	if err == nil {
-		t.Error("No errors getting seach/autocomplete of invalid city name")
+		t.Error("No errors getting search/autocomplete of invalid city name")
 	}
 }
