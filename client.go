@@ -13,8 +13,8 @@ const apiBaseURL = "http://api.apixu.com/" + apiVersion + "/"
 
 // OptionalParam represents optional query parameters.
 type OptionalParam struct {
-	name  string
-	value string
+	Name  string
+	Value string
 }
 
 // CurrentWeather represents json returned by current.
@@ -386,7 +386,7 @@ func (client *Client) getURL(path string, q string, optionalParams ...OptionalPa
 
 	// Set optional params.
 	for _, param := range optionalParams {
-		query.Set(param.name, param.value)
+		query.Set(param.Name, param.Value)
 	}
 
 	URL.RawQuery = query.Encode()
