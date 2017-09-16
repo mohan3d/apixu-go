@@ -1,12 +1,12 @@
 # apixu-go
 Golang library for Apixu Weather API http://www.apixu.com
 
-# Installation
+## Installation
 ```bash
 $ go get github.com/mohan3d/apixu-go
 ```
 
-# Usage
+## Usage
 ```go
 package main
 
@@ -37,7 +37,7 @@ func main() {
 }
 ```
 
-# Testing
+## Testing
 **APIXU_KEY** must be exported to environment variables before running tests.
 
 ```bash
