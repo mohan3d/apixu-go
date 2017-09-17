@@ -8,8 +8,6 @@ import (
 	"net/url"
 )
 
-// const apiVersion = "v1"
-// const apiBaseURL = "http://api.apixu.com/" + apiVersion + "/"
 const (
 	apiVersion = "v1"
 	apiBaseURL = "http://api.apixu.com/" + apiVersion + "/"
