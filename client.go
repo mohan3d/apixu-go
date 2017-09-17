@@ -8,8 +8,17 @@ import (
 	"net/url"
 )
 
-const apiVersion = "v1"
-const apiBaseURL = "http://api.apixu.com/" + apiVersion + "/"
+// const apiVersion = "v1"
+// const apiBaseURL = "http://api.apixu.com/" + apiVersion + "/"
+const (
+	apiVersion = "v1"
+	apiBaseURL = "http://api.apixu.com/" + apiVersion + "/"
+
+	currentPath  = "current.json"
+	forecastPath = "forecast.json"
+	historyPath  = "history.json"
+	searchPath   = "search.json"
+)
 
 // OptionalParam represents optional query parameters.
 type OptionalParam struct {
