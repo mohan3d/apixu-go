@@ -1,4 +1,7 @@
 # apixu-go
+[![Build Status](https://api.travis-ci.org/mohan3d/apixu-go.svg?branch=master)](https://travis-ci.org/mohan3d/apixu-go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/mohan3d/apixu-go)](https://goreportcard.com/report/github.com/mohan3d/apixu-go)
+
 Golang library for Apixu Weather API http://www.apixu.com
 
 ## Installation
