@@ -18,14 +18,13 @@ const (
 	searchPath   = "search.json"
 )
 
-// OptionalParam represents optional query parameters.
+// OptionalParam describes optional query parameters used in client methods.
 type OptionalParam struct {
 	Name  string
 	Value string
 }
 
-// Location object is returned with each API response.
-// It is actually the matched location for which the information has been returned.
+// Location describes essential data of the matched location.
 type Location struct {
 	Name           string  `json:"name"`
 	Region         string  `json:"region"`
@@ -37,7 +36,7 @@ type Location struct {
 	Localtime      string  `json:"localtime"`
 }
 
-// Current object contains current or realtime weather information for a given city.
+// Current describes realtime weather information.
 type Current struct {
 	LastUpdatedEpoch int     `json:"last_updated_epoch"`
 	LastUpdated      string  `json:"last_updated"`
@@ -65,8 +64,7 @@ type Current struct {
 	VisMiles   float64 `json:"vis_miles"`
 }
 
-// Forecast object contains astronomy data,
-// day weather forecast and hourly interval weather information for a given city.
+// Forecast describes astronomy data.
 type Forecast struct {
 	Forecastday []struct {
 		Date      string `json:"date"`
@@ -137,26 +135,26 @@ type Forecast struct {
 	} `json:"forecastday"`
 }
 
-// CurrentWeather represents json returned by current.
+// CurrentWeather describes data returned by current.
 type CurrentWeather struct {
 	Location Location `json:"location"`
 	Current  Current  `json:"current"`
 }
 
-// ForecastWeather represents json returned by forecast.
+// ForecastWeather describes data returned by forecast.
 type ForecastWeather struct {
 	Location Location `json:"location"`
 	Current  Current  `json:"current"`
 	Forecast Forecast `json:"forecast"`
 }
 
-// HistoryWeather represents json returned by history.
+// HistoryWeather describes data returned by history.
 type HistoryWeather struct {
 	Location Location `json:"location"`
 	Forecast Forecast `json:"forecast"`
 }
 
-// MatchingCities represents json returned by search.
+// MatchingCities describes data returned by search.
 type MatchingCities []struct {
 	ID      int     `json:"id"`
 	Name    string  `json:"name"`
@@ -174,7 +172,7 @@ type errorResponse struct {
 	} `json:"error"`
 }
 
-// Client represents apixu client.
+// Client describes apixu api client.
 type Client struct {
 	apiKey string
 }
@@ -202,7 +200,7 @@ func (client *Client) Current(q string, optionalParams ...OptionalParam) (*Curre
 	return &currentWeather, nil
 }
 
-// Forecast returns ForecastWeather obj representing Forecast status.
+// Forecast returns ForecastWeather obj representing forecast status.
 func (client *Client) Forecast(q string, days int, optionalParams ...OptionalParam) (*ForecastWeather, error) {
 	optionalParams = append(optionalParams, OptionalParam{"days", string(days)})
 	url, err := client.getURL(forecastPath, q, optionalParams...)
@@ -226,7 +224,7 @@ func (client *Client) Forecast(q string, days int, optionalParams ...OptionalPar
 	return &forecastWeather, nil
 }
 
-// History returns HistoryWeather obj representing History status.
+// History returns HistoryWeather obj representing history status.
 func (client *Client) History(q string, dt string, optionalParams ...OptionalParam) (*HistoryWeather, error) {
 	optionalParams = append(optionalParams, OptionalParam{"dt", dt})
 	url, err := client.getURL(historyPath, q, optionalParams...)
@@ -301,7 +299,7 @@ func (client *Client) getURL(path string, q string, optionalParams ...OptionalPa
 	return URL.String(), nil
 }
 
-// NewClient Creates new client and returns a ref.
+// NewClient returns a new client reference.
 func NewClient(apiKey string) *Client {
 	client := &Client{apiKey: apiKey}
 	return client
