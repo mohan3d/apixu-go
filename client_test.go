@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-const InvalidCityName = "INVALID-CITY-NAME"
+const InvalidCityName = "INVALIDCITYNAME"
 
 var cities = []string{
 	"Cairo",
